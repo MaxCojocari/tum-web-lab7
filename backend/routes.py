@@ -9,8 +9,8 @@ API_VERSION = 1
 DEFAULT_USER_ID = 1
 
 @app.route(f'/api/v{API_VERSION}/courses', methods=['GET'])
-@swag_from('swagger_yaml/get_all.yaml')
 @jwt_required()
+@swag_from('swagger_yaml/get_all.yaml')
 def get_courses():
     claims = get_jwt()
     
@@ -18,9 +18,8 @@ def get_courses():
         return jsonify({'message': 'Permission denied'}), 403
       
     try:
-        upper_limit = Course.query.count()
-        limit = request.args.get('limit', upper_limit, type=int)
-        offset = request.args.get('offset', 0, type=int)
+        limit = request.args.get('limit', default=None, type=int)
+        offset = request.args.get('offset', default=None, type=int)
 
         paginated_courses = Course.query.offset(offset).limit(limit).all()
 
@@ -31,8 +30,8 @@ def get_courses():
         return jsonify({"error": str(e)}), 500
 
 @app.route(f'/api/v{API_VERSION}/courses/<int:course_id>', methods=['GET'])
-@swag_from('swagger_yaml/get.yaml')
 @jwt_required()
+@swag_from('swagger_yaml/get.yaml')
 def get_course_by_id(course_id):
     claims = get_jwt()
     
@@ -50,8 +49,8 @@ def get_course_by_id(course_id):
         return jsonify({"error": str(e)}), 500
 
 @app.route(f'/api/v{API_VERSION}/courses', methods=['POST'])
-@swag_from('swagger_yaml/post.yaml')
 @jwt_required()
+@swag_from('swagger_yaml/post.yaml')
 def create_course():
     claims = get_jwt()
     
@@ -76,8 +75,8 @@ def create_course():
         return jsonify({"error": str(e)}), 500
 
 @app.route(f'/api/v{API_VERSION}/courses/<int:course_id>', methods=['PUT'])
-@swag_from('swagger_yaml/put.yaml')
 @jwt_required()
+@swag_from('swagger_yaml/put.yaml')
 def update_course(course_id):
     claims = get_jwt()
     
@@ -105,8 +104,8 @@ def update_course(course_id):
         return jsonify({"error": str(e)}), 500
 
 @app.route(f'/api/v{API_VERSION}/courses/<int:course_id>', methods=['DELETE'])
-@swag_from('swagger_yaml/delete.yaml')
 @jwt_required()
+@swag_from('swagger_yaml/delete.yaml')
 def delete_course(course_id):
     claims = get_jwt()
     

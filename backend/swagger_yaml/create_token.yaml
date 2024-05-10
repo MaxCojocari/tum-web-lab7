@@ -1,0 +1,65 @@
+Creates a JWT token for accessing endpoints
+---
+tags:
+  - jwt
+summary: Creates a JWT token with specified permissions
+description: This endpoint creates a JWT token based on the provided permissions and user ID.
+parameters:
+  - in: body
+    name: body
+    description: Payload containing permissions and user ID
+    required: true
+    schema:
+      $ref: "#/definitions/JwtRequest"
+
+definitions:
+  JwtRequest:
+    type: object
+    required:
+      - permissions
+    properties:
+      user_id:
+        type: string
+        description: The ID of the user for whom the token is being created. Defaults to a system-defined user ID if not specified.
+      permissions:
+        type: array
+        description: List of permissions to include in the token.
+        items:
+          type: string
+    example:
+      user_id: 1
+      permissions: ["READ", "WRITE"]
+  JwtSuccessMessage:
+    type: object
+    properties:
+      jwt:
+        type: string
+        description: The JWT token that was created.
+  ErrorMessage:
+    type: object
+    properties:
+      error:
+        type: string
+
+responses:
+  200:
+    description: JWT created successfully
+    schema:
+      $ref: "#/definitions/SuccessMessage"
+    examples:
+      application/json:
+        jwt: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  400:
+    description: Invalid request data
+    schema:
+      $ref: "#/definitions/ErrorMessage"
+    examples:
+      application/json:
+        error: "Missing required data fields"
+  500:
+    description: Internal server error
+    schema:
+      $ref: "#/definitions/ErrorMessage"
+    examples:
+      application/json:
+        error: "Some server error"

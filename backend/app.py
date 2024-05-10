@@ -12,7 +12,7 @@ def create_app():
     app.config['SWAGGER'] = {
         "title": "CourseMe API",
         "version": '0.1',
-        "description": "This is API description for CourseMe app.",
+        "description": "This is description for CourseMe API.",
         "license": {
             "name": "Apache 2.0",
             "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
