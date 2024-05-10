@@ -1,9 +1,11 @@
 from flask import request, jsonify
+from flask_jwt_extended import create_access_token
 from models.database import db
 from models.course import Course
 from __main__ import app
 
 API_VERSION = 1
+DEFAULT_USER_ID = 1
 
 @app.route(f'/api/v{API_VERSION}/courses', methods=['GET'])
 def get_courses():
@@ -90,4 +92,26 @@ def delete_course(course_id):
         return jsonify({"message": "Course deleted successfully"}), 200
     except Exception as e:
         db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+@app.route(f'/api/v{API_VERSION}/token', methods=['POST'])
+def create_token():
+    try:
+        data = request.get_json(silent=True) or {}
+
+        required_fields = ['permissions']
+        
+        if not all(field in data for field in required_fields):
+            return jsonify({"error": "Missing required data fields"}), 400
+        
+        user_id = data.get('user_id', DEFAULT_USER_ID)
+        additional_claims = {
+            'permissions': data.get('permissions')
+        }
+        
+        access_token = create_access_token(identity=user_id, additional_claims=additional_claims)
+        
+        return jsonify({"jwt": access_token}), 200
+    
+    except Exception as e:
         return jsonify({"error": str(e)}), 500
