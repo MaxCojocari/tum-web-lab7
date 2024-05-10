@@ -1,0 +1,80 @@
+Returns a course by ID
+---
+tags:
+  - course
+summary: Retrieves an object by id
+parameters:
+  - name: course_id
+    in: path
+    description: ID of the course to fetch
+    required: true
+    type: integer
+  - name: Authorization
+    in: header
+    description: "Bearer token to authorize API request"
+    required: true
+    schema:
+      type: string
+      example: "Bearer <token>"
+
+definitions:
+  Course:
+    type: object
+    properties:
+      name:
+        type: string
+        example: "UI/UX Basics"
+      nr_videos:
+        type: number
+        example: 110
+      nr_teachers:
+        type: number
+        example: 5
+      views:
+        type: number
+        example: 2999
+      price:
+        type: number
+        example: 200
+      img_id:
+        type: string
+        example: "course-4"
+  ErrorMessage:
+    type: object
+    properties:
+      error:
+        type: string
+
+responses:
+  200:
+    description: Successfully retrieved the resource
+    schema:
+      $ref: "#/definitions/Course"
+  401:
+    description: Token has expired
+    schema:
+      $ref: "#/definitions/ErrorMessage"
+    examples:
+      application/json:
+        error: "Token has expired"
+  403:
+    description: User access forbidden
+    schema:
+      $ref: "#/definitions/ErrorMessage"
+    examples:
+      application/json:
+        error: "Permission denied"
+  404:
+    description: Course not found
+    schema:
+      $ref: "#/definitions/ErrorMessage"
+    examples:
+      application/json:
+        error: "Course not found"
+  500:
+    description: Internal server error
+    schema:
+      $ref: "#/definitions/ErrorMessage"
+    examples:
+      application/json:
+        error: "Some server error"

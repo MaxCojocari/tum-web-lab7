@@ -1,0 +1,101 @@
+Updates an Course by ID
+---
+tags:
+  - course
+parameters:
+  - name: course_id
+    in: path
+    description: ID of the resource to update
+    required: true
+    type: integer
+  - name: course
+    in: body
+    description: Fields of Course to be updated
+    schema:
+      $ref: "#/definitions/Course"
+    examples:
+      application/json:
+        id: 1
+        name: "HTML & CSS"
+        nr_videos: 120
+        nr_teachers: 2
+        views: 1500
+        price: 20
+        img_id: "course-1"
+  - name: Authorization
+    in: header
+    description: "Bearer token to authorize API request"
+    required: true
+    schema:
+      type: string
+      example: "Bearer <token>"
+
+definitions:
+  Course:
+    type: object
+    properties:
+      name:
+        type: string
+        example: "UI/UX Basics"
+      nr_videos:
+        type: number
+        example: 110
+      nr_teachers:
+        type: number
+        example: 5
+      views:
+        type: number
+        example: 2999
+      price:
+        type: number
+        example: 200
+      img_id:
+        type: string
+        example: "course-4"
+  ErrorMessage:
+    type: object
+    properties:
+      error:
+        type: string
+  SuccessMessage:
+    type: object
+    properties:
+      message:
+        type: string
+
+responses:
+  200:
+    description: Successfully updated the resource
+    schema:
+      $ref: "#/definitions/SuccessMessage"
+    examples:
+      application/json:
+        message: "Course updated successfully"
+  401:
+    description: Token has expired
+    schema:
+      $ref: "#/definitions/ErrorMessage"
+    examples:
+      application/json:
+        msg: "Token has expired"
+  403:
+    description: User access forbidden
+    schema:
+      $ref: "#/definitions/ErrorMessage"
+    examples:
+      application/json:
+        error: "Permission denied"
+  404:
+    description: Resource not found
+    schema:
+      $ref: "#/definitions/ErrorMessage"
+    examples:
+      application/json:
+        error: "Course not found"
+  500:
+    description: Internal server error
+    schema:
+      $ref: "#/definitions/ErrorMessage"
+    examples:
+      application/json:
+        error: "Some server error"
