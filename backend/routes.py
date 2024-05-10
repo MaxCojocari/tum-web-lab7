@@ -3,11 +3,13 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt
 from models.database import db
 from models.course import Course
 from __main__ import app
+from flasgger import swag_from
 
 API_VERSION = 1
 DEFAULT_USER_ID = 1
 
 @app.route(f'/api/v{API_VERSION}/courses', methods=['GET'])
+@swag_from('swagger_yaml/get_all.yaml')
 @jwt_required()
 def get_courses():
     claims = get_jwt()
@@ -29,6 +31,7 @@ def get_courses():
         return jsonify({"error": str(e)}), 500
 
 @app.route(f'/api/v{API_VERSION}/courses/<int:course_id>', methods=['GET'])
+@swag_from('swagger_yaml/get.yaml')
 @jwt_required()
 def get_course_by_id(course_id):
     claims = get_jwt()
@@ -47,6 +50,7 @@ def get_course_by_id(course_id):
         return jsonify({"error": str(e)}), 500
 
 @app.route(f'/api/v{API_VERSION}/courses', methods=['POST'])
+@swag_from('swagger_yaml/post.yaml')
 @jwt_required()
 def create_course():
     claims = get_jwt()
@@ -72,6 +76,7 @@ def create_course():
         return jsonify({"error": str(e)}), 500
 
 @app.route(f'/api/v{API_VERSION}/courses/<int:course_id>', methods=['PUT'])
+@swag_from('swagger_yaml/put.yaml')
 @jwt_required()
 def update_course(course_id):
     claims = get_jwt()
@@ -100,6 +105,7 @@ def update_course(course_id):
         return jsonify({"error": str(e)}), 500
 
 @app.route(f'/api/v{API_VERSION}/courses/<int:course_id>', methods=['DELETE'])
+@swag_from('swagger_yaml/delete.yaml')
 @jwt_required()
 def delete_course(course_id):
     claims = get_jwt()
@@ -120,6 +126,7 @@ def delete_course(course_id):
         return jsonify({"error": str(e)}), 500
 
 @app.route(f'/api/v{API_VERSION}/token', methods=['POST'])
+@swag_from('swagger_yaml/create_token.yaml')
 def create_token():
     try:
         data = request.get_json(silent=True) or {}
