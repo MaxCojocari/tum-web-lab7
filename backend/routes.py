@@ -8,8 +8,15 @@ API_VERSION = 1
 @app.route(f'/api/v{API_VERSION}/courses', methods=['GET'])
 def get_courses():
     try:
-        all_courses = Course.query.all()
-        return jsonify([course.as_dict() for course in all_courses]), 200
+        upper_limit = Course.query.count()
+        limit = request.args.get('limit', upper_limit, type=int)
+        offset = request.args.get('offset', 0, type=int)
+
+        paginated_courses = Course.query.offset(offset).limit(limit).all()
+
+        courses_data = [course.as_dict() for course in paginated_courses]
+        
+        return jsonify(courses_data), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
