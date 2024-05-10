@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt
 from models.database import db
 from models.course import Course
 from __main__ import app
@@ -8,7 +8,13 @@ API_VERSION = 1
 DEFAULT_USER_ID = 1
 
 @app.route(f'/api/v{API_VERSION}/courses', methods=['GET'])
+@jwt_required()
 def get_courses():
+    claims = get_jwt()
+    
+    if 'READ' not in claims.get('permissions', []):
+        return jsonify({'message': 'Permission denied'}), 403
+      
     try:
         upper_limit = Course.query.count()
         limit = request.args.get('limit', upper_limit, type=int)
@@ -23,7 +29,13 @@ def get_courses():
         return jsonify({"error": str(e)}), 500
 
 @app.route(f'/api/v{API_VERSION}/courses/<int:course_id>', methods=['GET'])
+@jwt_required()
 def get_course_by_id(course_id):
+    claims = get_jwt()
+    
+    if 'READ' not in claims.get('permissions', []):
+        return jsonify({'message': 'Permission denied'}), 403
+
     try:
         course = Course.query.get(course_id)
         
@@ -35,7 +47,13 @@ def get_course_by_id(course_id):
         return jsonify({"error": str(e)}), 500
 
 @app.route(f'/api/v{API_VERSION}/courses', methods=['POST'])
+@jwt_required()
 def create_course():
+    claims = get_jwt()
+    
+    if 'WRITE' not in claims.get('permissions', []):
+        return jsonify({'message': 'Permission denied'}), 403
+    
     try:
         data = request.get_json(silent=True) or {}
 
@@ -54,7 +72,13 @@ def create_course():
         return jsonify({"error": str(e)}), 500
 
 @app.route(f'/api/v{API_VERSION}/courses/<int:course_id>', methods=['PUT'])
+@jwt_required()
 def update_course(course_id):
+    claims = get_jwt()
+    
+    if 'UPDATE' not in claims.get('permissions', []):
+        return jsonify({'message': 'Permission denied'}), 403
+    
     course = Course.query.get(course_id)
     if course is None:
         return jsonify({"error": "Course not found"}), 404
@@ -75,16 +99,17 @@ def update_course(course_id):
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
-
 @app.route(f'/api/v{API_VERSION}/courses/<int:course_id>', methods=['DELETE'])
+@jwt_required()
 def delete_course(course_id):
+    claims = get_jwt()
+    
+    if 'DELETE' not in claims.get('permissions', []):
+        return jsonify({'message': 'Permission denied'}), 403
+    
     course = Course.query.get(course_id)
     if course is None:
         return jsonify({"error": "Course not found"}), 404
-    
-    password = request.headers.get('X-Delete-Password')
-    if not password or password != '12345678':
-        return jsonify({"error": "Unauthorized"}), 401
     
     try:
         db.session.delete(course)
