@@ -142,7 +142,7 @@ def create_token():
         
         access_token = create_access_token(identity=user_id, additional_claims=additional_claims)
         response = jsonify({"jwt": access_token})
-        response.set_cookie('access_token_cookie', access_token, httponly=True, secure=False, samesite='Strict', max_age=3600)
+        response.set_cookie('access_token_cookie', access_token, httponly=True, secure=False, samesite='None', max_age=3600)  # for production, set secure=True
         return response, 200
     
     except Exception as e:

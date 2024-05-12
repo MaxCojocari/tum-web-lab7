@@ -2,6 +2,7 @@ from flask import Flask
 from models.database import db
 from flask_jwt_extended import JWTManager
 from flasgger import Swagger
+from flask_cors import CORS
 
 def create_app():
     app = Flask(__name__)
@@ -23,6 +24,7 @@ def create_app():
     }
     Swagger(app) 
     JWTManager(app)
+    CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "http://localhost:3000"}})
     db.init_app(app)
     return app
 
