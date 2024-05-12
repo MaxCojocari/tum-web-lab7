@@ -9,6 +9,9 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
     app.config['JWT_SECRET_KEY'] = 'ww%JlM}wa&"q10' 
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 60
+    app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+    app.config['JWT_COOKIE_SECURE'] = False # for https should be set to True
+    app.config['JWT_COOKIE_CSRF_PROTECT'] = False # True, for production use
     app.config['SWAGGER'] = {
         "title": "CourseMe API",
         "version": '0.1',

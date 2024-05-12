@@ -3,19 +3,13 @@ Returns a course by ID
 tags:
   - course
 summary: Retrieves an object by id
+description: Retrieves an object by id. A JWT token with READ permission is required in cookies.
 parameters:
   - name: course_id
     in: path
     description: ID of the course to fetch
     required: true
     type: integer
-  - name: Authorization
-    in: header
-    description: "Bearer token to authorize API request"
-    required: true
-    schema:
-      type: string
-      example: "Bearer <token>"
 
 definitions:
   Course:
@@ -23,27 +17,35 @@ definitions:
     properties:
       name:
         type: string
+        description: The name of the course.
         example: "UI/UX Basics"
       nr_videos:
         type: number
+        description: The number of videos in this course.
         example: 110
       nr_teachers:
         type: number
+        description: The number of teachers in this course.
         example: 5
       views:
         type: number
+        description: The number of view.
         example: 2999
       price:
         type: number
+        description: The price for purchasing the course.
         example: 200
       img_id:
         type: string
+        description: The image id to fetch.
         example: "course-4"
   ErrorMessage:
     type: object
     properties:
       error:
         type: string
+        description: The error message
+        example: "User access forbidden"
 
 responses:
   200:
