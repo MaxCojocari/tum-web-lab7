@@ -27,7 +27,6 @@ definitions:
         items:
           type: string
     example:
-      user_id: 1
       permissions: ["READ", "WRITE"]
   JwtSuccessMessage:
     type: object
