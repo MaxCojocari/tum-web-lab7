@@ -3,7 +3,7 @@ Creates a JWT token for accessing endpoints
 tags:
   - jwt
 summary: Creates a JWT token with specified permissions
-description: This endpoint creates a JWT token based on the provided permissions and user ID.
+description: This endpoint creates a JWT token based on the provided permissions and user ID and sets it in the cookies.
 parameters:
   - in: body
     name: body
@@ -35,11 +35,14 @@ definitions:
       jwt:
         type: string
         description: The JWT token that was created.
+        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJm..."
   ErrorMessage:
     type: object
     properties:
       error:
         type: string
+        description: The error message
+        example: "User access forbidden"
 
 responses:
   200:

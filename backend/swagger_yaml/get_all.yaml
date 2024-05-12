@@ -3,7 +3,7 @@ Returns courses list
 tags:
   - course
 summary: Retrieve a list of courses
-description: Returns a list of courses, with support for pagination.
+description: Returns a list of courses, with support for pagination. A JWT token with READ permission is required in cookies.
 parameters:
   - name: limit
     in: query
@@ -15,13 +15,6 @@ parameters:
     description: The offset parameter for pagination.
     required: false
     type: integer
-  - name: Authorization
-    in: header
-    description: "Bearer token to authorize API request"
-    required: true
-    schema:
-      type: string
-      example: "Bearer <token>"
 
 definitions:
   Course:
@@ -29,27 +22,35 @@ definitions:
     properties:
       name:
         type: string
+        description: The name of the course.
         example: "UI/UX Basics"
       nr_videos:
         type: number
+        description: The number of videos in this course.
         example: 110
       nr_teachers:
         type: number
+        description: The number of teachers in this course.
         example: 5
       views:
         type: number
+        description: The number of view.
         example: 2999
       price:
         type: number
+        description: The price for purchasing the course.
         example: 200
       img_id:
         type: string
+        description: The image id to fetch.
         example: "course-4"
   ErrorMessage:
     type: object
     properties:
       error:
         type: string
+        description: The error message
+        example: "User access forbidden"
   CoursesArray:
     type: array
     items:

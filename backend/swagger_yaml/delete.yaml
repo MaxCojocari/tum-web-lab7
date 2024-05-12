@@ -2,19 +2,14 @@ Deletes a course by ID
 ---
 tags:
   - course
+summary: Deletes a course by ID
+description: Deletes a course by ID. A JWT token with DELETE permission is required in cookies.
 parameters:
   - name: course_id
     in: path
     description: ID of the resource to delete
     required: true
     type: integer
-  - name: Authorization
-    in: header
-    description: "Bearer token to authorize API request"
-    required: true
-    schema:
-      type: string
-      example: "Bearer <token>"
 
 definitions:
   ErrorMessage:
@@ -22,11 +17,15 @@ definitions:
     properties:
       error:
         type: string
+        description: The error message
+        example: "User access forbidden"
   SuccessMessage:
     type: object
     properties:
       message:
         type: string
+        description: The success message.
+        example: "Successfully deleted the resource"
 
 responses:
   200:
