@@ -24,7 +24,7 @@ def create_app():
     }
     Swagger(app) 
     JWTManager(app)
-    CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "http://localhost:3000"}})
+    CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
     db.init_app(app)
     return app
 
