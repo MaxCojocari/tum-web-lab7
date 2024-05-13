@@ -27,6 +27,10 @@ Follow these steps to get your development environment set up:
    ```bash
    pip3 install -r requirements.txt
    ```
+4. Initialize DB with mock data:
+   ```bash
+   python3 init_db.py
+   ```  
 
 ## Running API
 
