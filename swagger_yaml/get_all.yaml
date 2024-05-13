@@ -15,6 +15,12 @@ parameters:
     description: The offset parameter for pagination.
     required: false
     type: integer
+  - name: ids
+    in: query
+    description: Array of IDs to fetch
+    required: false
+    type: string
+    example: "1,2,3"
 
 definitions:
   Course:
@@ -75,6 +81,13 @@ responses:
     examples:
       application/json:
         error: "Permission denied"
+  404:
+    description: Courses not found
+    schema:
+      $ref: "#/definitions/ErrorMessage"
+    examples:
+      application/json:
+        error: "Courses not found"
   500:
     description: Internal server error
     schema:
