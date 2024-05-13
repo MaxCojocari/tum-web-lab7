@@ -1,4 +1,6 @@
-from app import create_app, db, Course
+from app import create_app
+from models.database import db
+from models.course import Course
 from init_courses import COURSES
 
 def init_database():
