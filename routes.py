@@ -18,10 +18,17 @@ def get_courses():
         return jsonify({'message': 'Permission denied'}), 403
       
     try:
+        ids = request.args.get('ids')
         limit = request.args.get('limit', default=None, type=int)
         offset = request.args.get('offset', default=None, type=int)
 
-        paginated_courses = Course.query.offset(offset).limit(limit).all()
+        if ids:
+            ids = list(map(int, ids.split(',')))
+            paginated_courses = Course.query.filter(Course.id.in_(ids)).offset(offset).limit(limit).all()
+            if not paginated_courses:
+                return jsonify({"error": "Courses not found"}), 404
+        else:
+            paginated_courses = Course.query.offset(offset).limit(limit).all()
 
         courses_data = [course.as_dict() for course in paginated_courses]
         
